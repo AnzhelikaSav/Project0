@@ -4,6 +4,9 @@ import com.example.project0.models.NewModel
 import com.example.project0.network.NetworkService
 import com.example.project0.network.models.NewsJsonModel
 import com.example.project0.network.models.NewsXmlModel
+import com.example.project0.utils.formatDate
+import com.example.project0.utils.parseDate
+import java.time.LocalDate
 
 class NewsRepository(private val networkService: NetworkService) {
     suspend fun getNewsJson(): List<NewModel> {
@@ -22,7 +25,7 @@ class NewsRepository(private val networkService: NetworkService) {
                 id = it.id ?: -1,
                 title = it.title ?: "",
                 description = it.description ?: "",
-                date = it.date ?: "",
+                date = parseDate(it.date ?: ""),
                 keywords = it.keywords,
                 visible = it.visible ?: false
             )
@@ -35,7 +38,7 @@ class NewsRepository(private val networkService: NetworkService) {
                 id = it.id ?: -1,
                 title = it.title ?: "",
                 description = it.description ?: "",
-                date = it.date ?: "",
+                date = parseDate(it.date ?: ""),
                 keywords = it.keywords,
                 visible = it.visible ?: false
             )

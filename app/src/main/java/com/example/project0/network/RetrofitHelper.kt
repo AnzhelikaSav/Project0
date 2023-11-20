@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.project0.network
 
 import okhttp3.OkHttpClient

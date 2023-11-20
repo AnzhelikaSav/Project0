@@ -1,6 +1,8 @@
 package com.example.project0
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +20,8 @@ class MainViewModel: ViewModel() {
 
     private val repository = NewsRepository(networkService = NetworkService())
 
-    private val newsMutable = MutableLiveData<List<NewModel>>()
-    val news: LiveData<List<NewModel>>
+    private val newsMutable = listOf<NewModel>().toMutableStateList()
+    val news: List<NewModel>
         get() = newsMutable
 
     fun downloadJson() {
@@ -27,10 +29,10 @@ class MainViewModel: ViewModel() {
             try {
                 val response = repository.getNewsJson()
                 launch(Dispatchers.Main) {
-                    newsMutable.value = response
+                    newsMutable.addAll(response.sortedBy { it.date })
                 }
-            } catch (e: Exception) {
-                Log.e("AAAA", e.localizedMessage)
+            } catch (e: Throwable) {
+                Log.e("AAAA", e.message.toString())
             }
         }
     }
@@ -40,11 +42,15 @@ class MainViewModel: ViewModel() {
             try {
                 val response = repository.getNewsXml()
                 launch(Dispatchers.Main) {
-                    newsMutable.value = response
+                    newsMutable.addAll(response.sortedBy { it.date })
                 }
             } catch (e: Exception) {
-                Log.e("AAAA", e.localizedMessage)
+                Log.e("AAAA", e.message.toString())
             }
         }
+    }
+
+    fun clearNews() {
+        newsMutable.clear()
     }
 }
