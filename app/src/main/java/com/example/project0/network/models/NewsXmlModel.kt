@@ -1,4 +1,4 @@
-package com.example.project0.models
+package com.example.project0.network.models
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
@@ -18,5 +18,5 @@ data class NewXmlModel(
     @field:Element(name = "id") var id: Int? = null,
     @field:ElementList(name = "keywords", entry = "element") var keywords: ArrayList<String> = arrayListOf(),
     @field:Element(name = "title") var title: String? = null,
-    @field:Element(name = "visible") var visible: String? = null
+    @field:Element(name = "visible") var visible: Boolean? = null
 )

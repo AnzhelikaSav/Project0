@@ -1,7 +1,8 @@
 package com.example.project0.network
 
-import com.example.project0.models.NewsJsonModel
-import com.example.project0.models.NewsXmlModel
+import com.example.project0.network.models.NewsJsonModel
+import com.example.project0.network.models.NewsXmlModel
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface NewsApi {

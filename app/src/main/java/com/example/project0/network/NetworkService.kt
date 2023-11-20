@@ -1,9 +1,9 @@
 package com.example.project0.network
 
-import com.example.project0.models.NewsJsonModel
-import com.example.project0.models.NewsXmlModel
+import com.example.project0.network.models.NewsJsonModel
+import com.example.project0.network.models.NewsXmlModel
 
-object NetworkService {
+class NetworkService {
     private val newsApi = RetrofitHelper.getInstance().create(NewsApi::class.java)
 
     suspend fun getNewsJson(): NewsJsonModel {
