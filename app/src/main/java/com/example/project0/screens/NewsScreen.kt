@@ -1,5 +1,6 @@
 package com.example.project0.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -29,6 +31,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,7 +47,6 @@ import com.example.project0.utils.formatDate
 import com.example.project0.utils.parseDate
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(
     news: List<NewModel>,
@@ -51,27 +56,21 @@ fun NewsScreen(
     Column(
         modifier.fillMaxSize(),
     ) {
-        TextField(
-            value = "",
-            onValueChange = {},
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "")
-            },
-            trailingIcon = {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "")
-            },
-            placeholder = {
-                Text(text = stringResource(id = R.string.search_placeholder))
-            },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        var keyWord by remember { mutableStateOf("") }
+
+        SearchTextField { word -> keyWord = word }
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(news, key = { it.id }) {new ->
+            val newsForShowing = if (keyWord == "") {
+                news
+            } else {
+                news.filter { it.keywords.contains(keyWord) }
+            }
+
+            items(newsForShowing, key = { it.id }) {new ->
                 NewItem(new = new)
             }
             item {
@@ -86,6 +85,35 @@ fun NewsScreen(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchTextField(onDoneClick: (String) -> Unit) {
+
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = searchText,
+        onValueChange = { newValue -> searchText = newValue },
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "")
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.Done,
+                contentDescription = "",
+                modifier = Modifier.clickable { onDoneClick(searchText) }
+            )
+        },
+        placeholder = {
+            Text(text = stringResource(id = R.string.search_placeholder))
+        },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 @Composable
@@ -131,7 +159,7 @@ fun NewsScreenPreview() {
                     date = parseDate("2014-03-04 22:17:00 +0300")
                 )
             ),
-            {}
+            {},
         )
     }
 }
