@@ -27,7 +27,7 @@ class MainViewModel: ViewModel() {
     val news: List<NewModel>
         get() = newsMutable
 
-    fun downloadJson() {
+    fun downloadJson(onError: () -> Unit = {}) {
         CoroutineScope(Dispatchers.IO).async {
             try {
                 val response = repository.getNewsJson()
@@ -36,11 +36,14 @@ class MainViewModel: ViewModel() {
                 }
             } catch (e: Throwable) {
                 Log.e("AAAA", e.message.toString())
+                launch(Dispatchers.Main) {
+                    onError()
+                }
             }
         }
     }
 
-    fun downloadXml() {
+    fun downloadXml(onError: () -> Unit = {}) {
         CoroutineScope(Dispatchers.IO).async {
             try {
                 val response = repository.getNewsXml()
@@ -49,6 +52,9 @@ class MainViewModel: ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("AAAA", e.message.toString())
+                launch(Dispatchers.Main) {
+                    onError()
+                }
             }
         }
     }

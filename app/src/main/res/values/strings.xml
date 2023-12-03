@@ -4,4 +4,5 @@
     <string name="download_json">Скачать JSON</string>
     <string name="download_xml">Скачать XML</string>
     <string name="search_placeholder">Найти</string>
+    <string name="error_message">Произошла ошибка</string>
 </resources>

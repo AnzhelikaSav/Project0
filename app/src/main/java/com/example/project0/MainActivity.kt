@@ -2,6 +2,7 @@ package com.example.project0
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -27,10 +28,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val showErrorMessage = {
+                        Toast.makeText(
+                            this,
+                            getString(R.string.error_message),
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     if (viewModel.news.isEmpty()) {
                         LoadFileScreen(
-                            onClickJson = { viewModel.downloadJson() },
-                            onCLickXml = { viewModel.downloadXml() }
+                            onClickJson = { viewModel.downloadJson(showErrorMessage) },
+                            onCLickXml = { viewModel.downloadXml(showErrorMessage) }
                         )
                     } else {
                         NewsScreen(
